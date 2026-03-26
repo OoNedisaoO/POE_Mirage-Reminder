@@ -112,21 +112,80 @@ class MirageLogMonitor:
       on_mirage()            — fired when a Mirage NPC name appears in the log
     """
 
-    def __init__(self, filepath: Path, on_new_map, on_mirage):
-        self.filepath   = filepath
-        self.on_new_map = on_new_map
-        self.on_mirage  = on_mirage
+    def __init__(self, filepath: Path, on_new_map, on_mirage, on_leave_map):
+        self.filepath     = filepath
+        self.on_new_map   = on_new_map
+        self.on_mirage    = on_mirage
+        self.on_leave_map = on_leave_map
 
-        self._last_seed            = None
+        self._last_generation_seed = None
+        self._last_map_seed        = None
         self._new_instance_pending = False
-        self._pending_area         = None
         self._running              = False
         self._thread               = None
+        
+        import collections
+        self._recent_lines = collections.deque(maxlen=10)
+        self._in_map = False
 
     def start(self):
+        self._initialize_state()
         self._running = True
         self._thread  = threading.Thread(target=self._tail, daemon=True)
         self._thread.start()
+
+    def _initialize_state(self):
+        """Read the last 1MB of logs so restarting the app mid-map remembers where we are."""
+        import os
+        try:
+            with open(self.filepath, "r", encoding="utf-8", errors="replace") as f:
+                f.seek(0, os.SEEK_END)
+                start_pos = max(0, f.tell() - 1024 * 1024)
+                f.seek(start_pos)
+                lines = f.readlines()
+                if start_pos > 0 and len(lines) > 0:
+                    lines = lines[1:]
+                
+                map_name = None
+                mirage_found = False
+
+                for line in lines:
+                    self._recent_lines.append(line)
+                    if is_mirage_npc_line(line):
+                        mirage_found = True
+                        continue
+
+                    gm = GENERATING_RE.search(line)
+                    if gm:
+                        seed = gm.group(3)
+                        if seed != self._last_generation_seed:
+                            self._last_generation_seed = seed
+                            self._new_instance_pending = True
+                        continue
+
+                    em = ENTERED_RE.search(line)
+                    if em:
+                        area_name = em.group(1).strip()
+                        if is_town_or_hideout(area_name):
+                            self._new_instance_pending = False
+                            if self._in_map:
+                                self._in_map = False
+                            continue
+
+                        if self._new_instance_pending:
+                            self._new_instance_pending = False
+                            if self._last_generation_seed != self._last_map_seed:
+                                self._last_map_seed = self._last_generation_seed
+                                map_name = area_name
+                                mirage_found = False  # Reset mirage on new map
+                                self._in_map = True
+
+                if map_name:
+                    self.on_new_map(map_name)
+                if mirage_found:
+                    self.on_mirage()
+        except Exception:
+            pass
 
     def stop(self):
         self._running = False
@@ -141,6 +200,8 @@ class MirageLogMonitor:
                     time.sleep(0.25)
                     f.seek(pos)      # Windows file-handle re-sync
                     continue
+                
+                self._recent_lines.append(line)
 
                 # ── Step 1: Mirage NPC detection (highest priority) ──
                 # Check EVERY line for the NPC name; this fires as soon as
@@ -153,12 +214,10 @@ class MirageLogMonitor:
                 gm = GENERATING_RE.search(line)
                 if gm:
                     seed = gm.group(3)
-                    area = gm.group(2).strip()
-                    if seed != self._last_seed:
-                        self._last_seed            = seed
+                    if seed != self._last_generation_seed:
+                        self._last_generation_seed = seed
                         self._new_instance_pending = True
-                        self._pending_area         = area
-                    # Same seed → portal re-entry → don't reset
+                    # Same generation seed → don't reset pending state
                     continue
 
                 # ── Step 3: detect zone entry (confirm new map) ──
@@ -169,12 +228,24 @@ class MirageLogMonitor:
                     # Skip towns / hideouts
                     if is_town_or_hideout(area_name):
                         self._new_instance_pending = False
+                        if self._in_map:
+                            self._in_map = False
+                            died = any("has been slain" in l.lower() for l in self._recent_lines)
+                            self.on_leave_map(died)
                         continue
 
                     # New real map confirmed
                     if self._new_instance_pending:
                         self._new_instance_pending = False
-                        self.on_new_map(area_name)
+                        # Only reset IF the new map seed differs from our last valid map seed
+                        if self._last_generation_seed != self._last_map_seed:
+                            if self._in_map:
+                                died = any("has been slain" in l.lower() for l in self._recent_lines)
+                                self.on_leave_map(died)
+
+                            self._last_map_seed = self._last_generation_seed
+                            self._in_map = True
+                            self.on_new_map(area_name)
 
 
 # ─── GUI ─────────────────────────────────────────────────────────────────────
@@ -365,8 +436,17 @@ class MirageCheckerApp(tk.Tk):
     # ── Monitor setup ────────────────────────────────────────────────────────
 
     def _start_monitor(self, path: Path):
-        self._monitor = MirageLogMonitor(path, self._on_new_map, self._on_mirage)
+        self._monitor = MirageLogMonitor(path, self._on_new_map, self._on_mirage, self._on_leave_map)
         self._monitor.start()
+
+    def _on_leave_map(self, died_recently: bool):
+        if not self._mirage_found and not died_recently:
+            try:
+                import winsound
+                # Distinct beep (600Hz, 300ms) to indicate missed mirage
+                winsound.Beep(600, 300)
+            except Exception:
+                pass
 
     def _load_custom_path(self):
         raw = self._path_entry.get().strip()

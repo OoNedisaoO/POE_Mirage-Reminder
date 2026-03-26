@@ -35,7 +35,7 @@ The app uses only standard Python libraries. **No external `pip install` command
    python mirage_checker.py
 
 
-###🔧 Troubleshooting
+### 🔧 Troubleshooting
 The overlay doesn't turn green? The app automatically looks for your Client.txt in the standard Steam and Standalone install folders. If it can't find it, a text box will appear in the overlay—just paste the full path to your Client.txt and click OK.
 
 Did GGG change the NPC name? If a future patch alters the NPC name, you can open mirage_checker.py in any text editor and update the keywords at the top of the file.

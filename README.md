@@ -6,11 +6,12 @@ If you are running hundreds of maps and everything is turning into a blur, it is
 
 ## ✨ Features
 
-* **Visual Indicator:** A simple UI button that sits on top of your game.
-  * 🟠 **Orange:** No Mirage yet on this map (or a new map just started).
-  * 🟢 **Green:** The Mirage mechanic has spawned on this map!
-* **Smart Map Tracking:** It tracks zone generation seeds. It automatically resets to Orange when you start a *new* map instance, but remembers your state if you just portal to town and re-enter the same seed.
-* **100% TOS Safe:** This tool does **not** read game memory or interact with the game client. It strictly tails your local `Client.txt` log file, which is fully allowed by Grinding Gear Games.
+* **Visual Indicator:** A simple UI button that sits on top of your game, staying Orange when searching and turning Green when the Mirage is found.
+* **Audio Warning:** If you portal to a town or hideout and haven't encountered the Mirage yet, it plays a distinct beep warning you that you missed it.
+* **Smart Death Detection:** The tool checks your last 10 log lines for death messages ("has been slain"); if you just died, it suppresses the audio warning so it doesn't annoy you while you recover.
+* **State Recovery:** If you accidentally close the tool and restart it, it reads the last 1MB of your log file to instantly remember what map you are in and whether the Mirage had already spawned.
+* **Smart Map Tracking:** It tracks zone generation seeds to reset automatically on new maps, while preserving your state if you simply portal to town and re-enter.
+* **100% TOS Safe:** This tool does **not** read game memory. It strictly tails your local `Client.txt` log file.
 * **Customizable UI:** Click and drag to move, drag the bottom-right corner to resize, or hold `Ctrl + Mouse Wheel` to scale the entire UI (fonts and all) up or down.
 
 ## ⚙️ How It Works

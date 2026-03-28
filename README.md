@@ -1,45 +1,41 @@
-# PoE Mirage Checker Overlay
+# 🌌 PoE Mirage Checker Overlay
 
 A lightweight, always-on-top overlay for Path of Exile designed to completely cure "map blindness." 
 
-If you are running hundreds of maps and everything is turning into a blur, it is incredibly easy to autopilot right past the league mechanic. I built this tool to outsource my working memory—it reads your game logs in real-time and tells you if the **Mirage** league mechanic (Verashta, the Afarud Necromancer) has spawned in your current map so you don't have to think about it.
+If you are running hundreds of maps, it is incredibly easy to autopilot right past the league mechanic. This tool reads your game logs in real-time and tells you if the **Mirage** (Verashta, the Afarud Necromancer) has spawned in your current map so you don't have to think about it.
+
+---
+
+## 🚀 Quick Start (Windows EXE)
+
+The easiest way to use the tool without installing Python.
+
+1.  **Download:** Go to the [Releases](https://github.com/OoNedisaoO/Mirage-Helper/releases) page and download `MirageHelper.exe`.
+2.  **Run:** Double-click the EXE. 
+    * *Note: Windows might show a "SmartScreen" warning because the EXE isn't digitally signed. Click **"More Info"** -> **"Run Anyway"**.*
+3.  **Position:** Drag the overlay anywhere on your screen.
+4.  **Scaling:** Hold `Ctrl + Mouse Wheel` to scale the UI size (fonts and window) up or down.
+
+---
 
 ## ✨ Features
 
-* **Visual Indicator:** A simple UI button that sits on top of your game, staying Orange when searching and turning Green when the Mirage is found.
-* **Audio Warning:** If you portal to a town or hideout and haven't encountered the Mirage yet, it plays a distinct beep warning you that you missed it.
-* **Smart Death Detection:** The tool checks your last 10 log lines for death messages ("has been slain"); if you just died, it suppresses the audio warning so it doesn't annoy you while you recover.
-* **State Recovery:** If you accidentally close the tool and restart it, it reads the last 1MB of your log file to instantly remember what map you are in and whether the Mirage had already spawned.
-* **Smart Map Tracking:** It tracks zone generation seeds to reset automatically on new maps, while preserving your state if you simply portal to town and re-enter.
-* **100% TOS Safe:** This tool does **not** read game memory. It strictly tails your local `Client.txt` log file.
-* **Customizable UI:** Click and drag to move, drag the bottom-right corner to resize, or hold `Ctrl + Mouse Wheel` to scale the entire UI (fonts and all) up or down.
+* **Real-time Detection:** Automatically turns **🟢 Green** the second Verashta is detected in the logs.
+* **Audio Warning:** Plays a distinct beep if you leave a map (portal to town/hideout) without finding the Mirage.
+* **Smart Death Detection:** The tool checks your last 10 log lines for death messages; if you just died, it suppresses the audio warning.
+* **State Recovery:** If you restart the tool mid-map, it reads the last 1MB of your log to instantly remember your current map state.
+* **100% TOS Safe:** Does **not** read game memory or inject code. It strictly "tails" the local `Client.txt` log file.
 
-## ⚙️ How It Works
+---
 
-Path of Exile writes NPC spawns and dialogue directly to your `Client.txt` file the moment they render in the zone. This script runs a background thread that constantly tails this log file, scanning for the Mirage NPC ("Verashta"). When the keyword is found, it instantly flips the overlay to Green—often before you even walk up to the mechanic!
+## 🛠️ Manual Installation (Python)
 
-## 🚀 Installation & Usage
+If you prefer to run the source code directly:
 
 ### Prerequisites
-1. **Python 3.8 or higher**: Download and install from [python.org](https://www.python.org/downloads/).
-2. **Crucial step:** During installation, ensure you check the box that says **"Add Python to PATH"**.
+* **Python 3.8+** (Ensure "Add Python to PATH" is checked during install).
+* The app uses only standard Python libraries (**No `pip install` required**).
 
-### Dependencies
-The app uses only standard Python libraries. **No external `pip install` commands are required.**
-
-### Setup & Running
-1. Download the `mirage_checker.py` script.
-2. Place it in a dedicated folder (e.g., `C:\POE Tools\Mirage Checker\`).
-3. Open PowerShell or CMD and run:
-   ```cmd
-   cd "C:\POE Tools\Mirage Checker"
-   python mirage_checker.py
-
-
-### 🔧 Troubleshooting
-The overlay doesn't turn green? The app automatically looks for your Client.txt in the standard Steam and Standalone install folders. If it can't find it, a text box will appear in the overlay—just paste the full path to your Client.txt and click OK.
-
-Did GGG change the NPC name? If a future patch alters the NPC name, you can open mirage_checker.py in any text editor and update the keywords at the top of the file.
-
-📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+### Running
+```powershell
+python mirage_checker.py

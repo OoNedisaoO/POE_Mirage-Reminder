@@ -1,9 +1,11 @@
-# 🌌 PoE Mirage Checker Overlay
+# 🌌 PoE Mirage Reminder Overlay
 
 A lightweight, always-on-top overlay for Path of Exile designed to completely cure "map blindness." 
 
 If you are running hundreds of maps, it is incredibly easy to autopilot right past the league mechanic. This tool reads your game logs in real-time and tells you if the **Mirage** (Verashta, the Afarud Necromancer) has spawned in your current map so you don't have to think about it.
+
 <img width="388" height="213" alt="image" src="https://github.com/user-attachments/assets/3dfbacd3-d35a-4a35-8591-f465ea535e17" />
+
 <img width="388" height="213" alt="image" src="https://github.com/user-attachments/assets/aed28542-4d75-4fcb-951d-76b7332a01a5" />
 
 

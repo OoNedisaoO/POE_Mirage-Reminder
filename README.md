@@ -15,7 +15,7 @@ If you are running hundreds of maps, it is incredibly easy to autopilot right pa
 
 The easiest way to use the tool without installing Python.
 
-1.  **Download:** Go to the [Releases](https://github.com/OoNedisaoO/Mirage-Helper/releases) page and download `MirageHelper.exe`.
+1.  **Download:** Go to the [Releases] page and download `MirageReminder.exe`.
 2.  **Run:** Double-click the EXE. 
     * *Note: Windows might show a "SmartScreen" warning because the EXE isn't digitally signed. Click **"More Info"** -> **"Run Anyway"**.*
 3.  **Position:** Drag the overlay anywhere on your screen.
@@ -43,4 +43,4 @@ If you prefer to run the source code directly:
 
 ### Running
 ```powershell
-python mirage_checker.py
+python mirage_reminder.py

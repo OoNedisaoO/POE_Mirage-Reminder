@@ -4,9 +4,10 @@ A lightweight, always-on-top overlay for Path of Exile designed to completely cu
 
 If you are running hundreds of maps, it is incredibly easy to autopilot right past the league mechanic. This tool reads your game logs in real-time and tells you if the **Mirage** (Verashta, the Afarud Necromancer) has spawned in your current map so you don't have to think about it.
 
-https://i.imgur.com/HL96wyd.png
+<img width="250" height="138" alt="image" src="https://github.com/user-attachments/assets/029b8d0a-dca8-4d0a-8f31-c76e49105675" />
 
-https://i.imgur.com/qzq1O0d.png
+<img width="250" height="138" alt="image" src="https://github.com/user-attachments/assets/48e82ff8-774b-49e4-9334-19296915790d" />
+
 
 ---
 

@@ -27,7 +27,6 @@ The easiest way to use the tool without installing Python.
 
 * **Real-time Detection:** Automatically turns **🟢 Green** the second Verashta is detected in the logs.
 * **Audio Warning:** Plays a distinct beep if you leave a map (portal to town/hideout) without finding the Mirage.
-* **Smart Death Detection:** The tool checks your last 10 log lines for death messages; if you just died, it suppresses the audio warning.
 * **State Recovery:** If you restart the tool mid-map, it reads the last 1MB of your log to instantly remember your current map state.
 * **100% TOS Safe:** Does **not** read game memory or inject code. It strictly "tails" the local `Client.txt` log file.
 

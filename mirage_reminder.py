@@ -1,5 +1,5 @@
 """
-mirage_checker.py — POE Mirage Checker Overlay
+mirage_checker.py — POE Mirage Reminder Overlay
 ================================================
 Reads Client.txt in real time (same Traxile-style logic as the POE SSF Logger).
 
@@ -273,7 +273,7 @@ class MirageCheckerApp(tk.Tk):
     # ── UI construction ──────────────────────────────────────────────────────
 
     def _build_ui(self):
-        self.title("Mirage Checker")
+        self.title("Mirage Reminder")
         self.geometry(f"{WINDOW_W}x{WINDOW_H}+100+100")
         self.resizable(False, False)
         self.configure(bg=CLR_BG)
@@ -292,7 +292,7 @@ class MirageCheckerApp(tk.Tk):
         self._bar.bind("<ButtonPress-1>", self._drag_start)
         self._bar.bind("<B1-Motion>",     self._drag_motion)
 
-        self._title_lbl = tk.Label(self._bar, text="  ✦ Mirage Checker", bg=CLR_CARD,
+        self._title_lbl = tk.Label(self._bar, text="  ✦ Mirage Reminder", bg=CLR_CARD,
                                    fg=CLR_TITLE, font=("Segoe UI", 9, "bold"))
         self._title_lbl.pack(side="left")
         
